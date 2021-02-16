@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Animated, Text, View , FlatList,Image,TouchableOpacity, Button} from 'react-native';
+import { Animated, Text, View , FlatList,Image,TouchableOpacity, Button, TextInput, } from 'react-native';
 import styles from "./styles";
 
 const DATA = [
@@ -28,7 +28,7 @@ const DATA = [
 
 export default function SeenScreen({navigation}){
 
-  var moveAnimation = new Animated.ValueXY({ x: 0, y: -440 })
+  var moveAnimation = new Animated.ValueXY({ x: 0, y: -500 })
 
   const slideIn = () => {
     Animated.spring(moveAnimation, {
@@ -38,11 +38,12 @@ export default function SeenScreen({navigation}){
 
   const slideOut = () => {
     Animated.spring(moveAnimation, {
-      toValue: {x: 0, y: -440},
+      toValue: {x: 0, y: -500},
     }).start()
   };
   
     const renderItem = ({item})=>(<Item title = {item.title} url ={item.url}/>)
+    const [text, onChangeText] = React.useState('...');
 
     return (
         <View style = {styles.container}>
@@ -53,15 +54,47 @@ export default function SeenScreen({navigation}){
                 <Image source = {require("../../../assets/icon.png")} style = {{width:50,height:50,marginLeft:10,marginTop:30}}/>
             </TouchableOpacity>
           
-          <Text style={styles.header}>MyAnimeList</Text>
+            <Text style={styles.header}>MyAnimeList</Text>
 
-          <TouchableOpacity onPress={slideIn}>
-                <Image source = {require("../../../assets/icon.png")} style = {{width:50,height:50,marginLeft:175,marginTop:40}}/>
-            </TouchableOpacity>
-          </View>
+            <TouchableOpacity onPress={slideIn}>
+                  <Image source = {require("../../../assets/icon.png")} style = {{width:50,height:50,marginLeft:175,marginTop:40}}/>
+              </TouchableOpacity>
+            </View>
 
             <Animated.View style = {{width:"100%",height:"50%",position:"absolute", elevation:10,backgroundColor:"indigo", top: moveAnimation.y}}>
+              
               <Button title="goback" onPress={slideOut}/>
+              
+              <Text style={{marginTop: 5, marginBottom: 5}}>inserisci il nome</Text>
+              <TextInput
+               style={{ height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor:"green" }}
+                onChangeText={text => onChangeText(text)}
+                defaultValue={text}
+              />
+
+              
+              
+              <Text style={{marginTop: 5, marginBottom: 5}}>inserisci l'url dell'immagine</Text>
+              <TextInput
+               style={{ height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor:"green" }}
+                onChangeText={text => onChangeText(text)}
+                defaultValue={text}
+              />
+
+              <Text style={{marginTop: 5, marginBottom: 5}}>inserisci l'url dell'sito o della pagina wiki</Text>
+              <TextInput
+               style={{ height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor:"green" }}
+                onChangeText={text => onChangeText(text)}
+                defaultValue={text}
+              />
+              <TouchableOpacity style={{
+                alignItems: "center",
+                backgroundColor: "#DDDDDD",
+                padding: 10,
+                marginTop: 25,
+              }}>
+                 <Text> Submit </Text>
+              </TouchableOpacity>
             </Animated.View>
 
 
