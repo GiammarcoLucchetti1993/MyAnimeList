@@ -2,6 +2,16 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Animated, Text, View , FlatList,Image,TouchableOpacity, Button, TextInput, } from 'react-native';
 import styles from "./styles";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Value } from 'react-native-reanimated';
+
+const saveData = async(nomeAnime,Value)=>{
+  try{
+    const jsonValue = JSON.stringify(Value)
+    await AsyncStorage.setItem(nomeAnime,jsonValue)
+  }catch(e){}
+  console.log("fatto")
+  }
 
 const DATA = [
     {
@@ -92,7 +102,7 @@ export default function SeenScreen({navigation}){
                 backgroundColor: "#DDDDDD",
                 padding: 10,
                 marginTop: 25,
-              }}>
+              }} onPress = {()=>{alert()}}>
                  <Text> Submit </Text>
               </TouchableOpacity>
             </Animated.View>
