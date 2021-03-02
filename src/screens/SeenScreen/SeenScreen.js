@@ -11,7 +11,30 @@ const saveData = async(nomeAnime,Value)=>{
     await AsyncStorage.setItem(nomeAnime,jsonValue)
   }catch(e){}
   console.log("fatto")
-  }
+}
+  
+const retriveData = async () => {
+  try{
+    var keys = await AsyncStorage.getAllKeys()
+    
+    const allElement = await AsyncStorage.multiGet(keys)
+    //console.log(allElement)
+
+    allElement.forEach(element => {
+      console.log("name: " + element[0]);
+      
+      var internal = JSON.parse(element[1]);
+      console.log("urlImg: " + internal[0]["urlImg"])
+      console.log("urlWiki: " + internal[0]["urlWiki"])
+      console.log("\n")
+    });  
+      
+    
+  }catch(e) {}
+
+}
+
+
 
 const DATA = [
     {
@@ -53,7 +76,9 @@ export default function SeenScreen({navigation}){
   };
   
     const renderItem = ({item})=>(<Item title = {item.title} url ={item.url}/>)
-    const [text, onChangeText] = React.useState('...');
+    const [nomeAnime, onChangeName] = React.useState('...');
+    const [urlImg, onChangeUrlImg] = React.useState('...');
+    const [urlWiki, onChangeUrlWiki] = React.useState('...');
 
     return (
         <View style = {styles.container}>
@@ -66,7 +91,7 @@ export default function SeenScreen({navigation}){
           
             <Text style={styles.header}>MyAnimeList</Text>
 
-            <TouchableOpacity onPress={slideIn}>
+            <TouchableOpacity onPress={ slideIn }>
                   <Image source = {require("../../../assets/icon.png")} style = {{width:50,height:50,marginLeft:175,marginTop:40}}/>
               </TouchableOpacity>
             </View>
@@ -78,33 +103,43 @@ export default function SeenScreen({navigation}){
               <Text style={{marginTop: 5, marginBottom: 5}}>inserisci il nome</Text>
               <TextInput
                style={{ height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor:"green" }}
-                onChangeText={text => onChangeText(text)}
-                defaultValue={text}
+                onChangeText={nomeAnime => onChangeName(nomeAnime)}
+                defaultValue={nomeAnime}
               />
-
-              
               
               <Text style={{marginTop: 5, marginBottom: 5}}>inserisci l'url dell'immagine</Text>
               <TextInput
                style={{ height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor:"green" }}
-                onChangeText={text => onChangeText(text)}
-                defaultValue={text}
+                onChangeText={urlImg => onChangeUrlImg(urlImg)}
+                defaultValue={urlImg}
               />
 
               <Text style={{marginTop: 5, marginBottom: 5}}>inserisci l'url dell'sito o della pagina wiki</Text>
               <TextInput
                style={{ height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor:"green" }}
-                onChangeText={text => onChangeText(text)}
-                defaultValue={text}
+                onChangeText={urlWiki => onChangeUrlWiki(urlWiki)}
+                defaultValue={urlWiki}
               />
-              <TouchableOpacity style={{
-                alignItems: "center",
-                backgroundColor: "#DDDDDD",
-                padding: 10,
-                marginTop: 25,
-              }} onPress = {()=>{alert()}}>
+
+              <TouchableOpacity 
+                style={{
+                  alignItems: "center",
+                  backgroundColor: "#DDDDDD",
+                }} 
+                onPress = { () => { saveData(nomeAnime, [{ "urlImg": urlImg, "urlWiki": urlWiki}]) } }>
+                {/* onPress = { () => { retriveData() } }>  */}
                  <Text> Submit </Text>
               </TouchableOpacity>
+
+              <TouchableOpacity 
+                style={{
+                  alignItems: "center",
+                  backgroundColor: "#DDDDDD",
+                }} 
+                onPress = { () => { retriveData()} }>
+                 <Text> Submit </Text>
+              </TouchableOpacity>
+
             </Animated.View>
 
 
