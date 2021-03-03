@@ -12,6 +12,13 @@ const saveData = async(nomeAnime,Value)=>{
   }catch(e){}
   console.log("fatto")
 }
+
+const clear = async () => {
+  try{
+    await AsyncStorage.clear()
+  }catch(e){}
+  console.log("database Pulito")
+}
   
 const retriveData = async () => {
   try{
@@ -27,6 +34,12 @@ const retriveData = async () => {
       console.log("urlImg: " + internal[0]["urlImg"])
       console.log("urlWiki: " + internal[0]["urlWiki"])
       console.log("\n")
+      var anime = {title: element[0],urlImg: internal[0]["urlImg"],urlWiki: internal[0]["urlWiki"]}
+      if(!DATA.includes(anime))
+      {
+        //DATA.push(anime)
+        console.log("qualcosa")
+      }
     });  
       
     
@@ -34,23 +47,11 @@ const retriveData = async () => {
 
 }
 
-
-
 const DATA = [
     {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
       title: 'First Item',
-      url : "ciao",
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: 'Second Item',
-      url : "ciao",
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'Third Item',
-      url : "ciao",
+      urlImg : "Img",
+      urlWiki : "Wiki",
     },
   ];
   const Item = ({ title, url}) => (
@@ -60,6 +61,8 @@ const DATA = [
   );
 
 export default function SeenScreen({navigation}){
+
+  retriveData()
 
   var moveAnimation = new Animated.ValueXY({ x: 0, y: -500 })
 
@@ -103,21 +106,21 @@ export default function SeenScreen({navigation}){
               <Text style={{marginTop: 5, marginBottom: 5}}>inserisci il nome</Text>
               <TextInput
                style={{ height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor:"green" }}
-                onChangeText={nomeAnime => onChangeName(nomeAnime)}
+                onChangeText={text => onChangeName(text)}
                 defaultValue={nomeAnime}
               />
               
               <Text style={{marginTop: 5, marginBottom: 5}}>inserisci l'url dell'immagine</Text>
               <TextInput
                style={{ height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor:"green" }}
-                onChangeText={urlImg => onChangeUrlImg(urlImg)}
+                onChangeText={text => onChangeUrlImg(text)}
                 defaultValue={urlImg}
               />
 
               <Text style={{marginTop: 5, marginBottom: 5}}>inserisci l'url dell'sito o della pagina wiki</Text>
               <TextInput
                style={{ height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor:"green" }}
-                onChangeText={urlWiki => onChangeUrlWiki(urlWiki)}
+                onChangeText={text => onChangeUrlWiki(text)}
                 defaultValue={urlWiki}
               />
 
@@ -126,17 +129,12 @@ export default function SeenScreen({navigation}){
                   alignItems: "center",
                   backgroundColor: "#DDDDDD",
                 }} 
-                onPress = { () => { saveData(nomeAnime, [{ "urlImg": urlImg, "urlWiki": urlWiki}]) } }>
-                {/* onPress = { () => { retriveData() } }>  */}
-                 <Text> Submit </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={{
-                  alignItems: "center",
-                  backgroundColor: "#DDDDDD",
-                }} 
-                onPress = { () => { retriveData()} }>
+                onPress = { () => {
+                  console.log("nome " + nomeAnime)
+                  console.log("Img " + urlImg)
+                  console.log("Wiki " + urlWiki)
+                   saveData(nomeAnime, [{ "urlImg": urlImg, "urlWiki": urlWiki}]);
+                  } }>
                  <Text> Submit </Text>
               </TouchableOpacity>
 
@@ -148,7 +146,7 @@ export default function SeenScreen({navigation}){
                         <FlatList
                             data={DATA}
                             renderItem={renderItem}
-                            keyExtractor={(item)=>item.id}
+                            keyExtractor={(item)=>item.title}
                             removeClippedSubviews={true}
                         />
                 </View>
